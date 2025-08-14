@@ -1,0 +1,27 @@
+name: Deploy LMS to GitHub Pages
+
+on:
+  push:
+    branches:
+      - develop  # Trigger deploy when you push to develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Install wget (optional, if using static export from local server)
+      - name: Install wget
+        run: sudo apt-get update && sudo apt-get install -y wget
+
+      # 3. Deploy static files to gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./localhost:8000  # Path to your static LMS export
+          publish_branch: gh-pages
